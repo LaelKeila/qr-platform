@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Scanner un QR Code</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        video {
+            width: 100%;
+            max-width: 500px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scanner un QR Code</h1>
+    <video id="preview"></video>
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        const resultElement = document.getElementById('result');
+
+        function onScanSuccess(decodedText) {
+            fetch(`/verify/${decodedText}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.found) {
+                        resultElement.innerHTML = `✅ <strong>${data.name}</strong> est inscrit.e !`;
+                    } else {
+                        resultElement.innerHTML = "❌ Utilisateur non trouvé.";
+                    }
+                });
+        }
+
+        const html5QrCode = new Html5Qrcode("preview");
+        html5QrCode.start({ facingMode: "environment" }, {
+            fps: 10,
+            qrbox: 250
+        }, onScanSuccess);
+    </script>
+</body>
+</html>
