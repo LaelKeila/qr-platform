@@ -56,6 +56,7 @@
             <select name="presence" required>
                 <option value="" disabled selected>Seras-tu présent(e) ?</option>
                 <option value="oui">Oui, je serai là 🎶</option>
+                <option value="hesitation">Oui, mais j'hésite encore 🤔</option> <!-- Nouvel ajout -->
                 <option value="non">Non, je ne peux pas 😞</option>
             </select>
             <input type="submit" value="S'inscrire et générer le QR">
