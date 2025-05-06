@@ -6,10 +6,11 @@ import json
 
 app = Flask(__name__)
 
-# Chemins de fichiers et dossiers
+# Dossiers pour stocker les QR codes
 QR_FOLDER = 'static/qrcodes'
 os.makedirs(QR_FOLDER, exist_ok=True)
 
+# Fichier pour stocker les utilisateurs
 DATA_FILE = 'users.json'
 if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'w') as f:
@@ -20,13 +21,13 @@ if not os.path.exists(DATA_FILE):
 def scan():
     return render_template('scan.html')
 
-# Vérification d'un utilisateur via son ID
+# Vérification d'un utilisateur via son QR code
 @app.route('/verify/<user_id>')
 def verify(user_id):
     with open(DATA_FILE, 'r') as f:
         users = json.load(f)
     for user in users:
-        if user['id'] == user_id:
+        if user.get('qr_code_data', '').endswith(user_id):
             return jsonify({'found': True, 'name': user['name']})
     return jsonify({'found': False})
 
@@ -40,12 +41,16 @@ def index():
         presence = request.form['presence']
         user_id = str(uuid.uuid4())
 
+        # Génère une URL dynamique (utile pour Render)
+        verify_url = f"{request.host_url}verify/{user_id}".rstrip('/')
+
         data = {
             'id': user_id,
             'name': name,
             'phone': phone,
             'email': email,
-            'presence': presence
+            'presence': presence,
+            'qr_code_data': verify_url
         }
 
         # Sauvegarde de l'utilisateur
@@ -55,20 +60,24 @@ def index():
         with open(DATA_FILE, 'w') as f:
             json.dump(users, f, indent=4)
 
-        # Si la personne sera présente ou hésite encore, génère le QR code
+        # Traitement basé sur la présence
         if presence == 'oui' or presence == 'hesitation':
-            # URL de vérification à encoder dans le QR code
-            verify_url = f"http://127.0.0.1:5000/verify/{user_id}"
-
-            # Génération du QR code avec l'URL complète
+            # Génération du QR code
             qr = qrcode.make(verify_url)
             qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
             qr.save(qr_path)
 
-            return render_template('confirm.html', name=name, qr_code='/' + qr_path, qr_filename=f"{user_id}.png", verify_url=verify_url)
-        else:
-            # Si l'utilisateur ne sera pas présent, afficher un message sans QR code
-            return render_template('confirm.html', name=name, message="Merci pour ton inscription, mais comme tu ne seras pas présent(e), aucun QR code n'a été généré.")
+            # Message personnalisé en fonction de la présence
+            if presence == 'oui':
+                message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement, il sera vérifié à l'entrée."
+            elif presence == 'hesitation':
+                message = "Merci pour ton inscription ! Nous espérons te voir à l'événement. N'oublie pas d'amener ce QR code le jour de l'événement, il sera vérifié à l'entrée."
+            
+            return render_template('confirm.html', name=name, qr_code='/' + qr_path, qr_filename=f"{user_id}.png", verify_url=verify_url, message=message)
+
+        else:  # Si la personne ne sera pas présente
+            message = "Merci pour ton inscription, mais comme tu ne seras pas présent(e), aucun QR code n'a été généré."
+            return render_template('confirm.html', name=name, message=message)
 
     return render_template('index.html')
 
@@ -77,5 +86,7 @@ def index():
 def download(filename):
     return send_from_directory(QR_FOLDER, filename, as_attachment=True)
 
+# Lancement de l'application (compatible Render)
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

@@ -117,5 +117,92 @@
         "phone": "63097864",
         "email": "knacro3@gmail.com",
         "presence": "oui"
+    },
+    {
+        "id": "256a9bd1-13b1-4379-80c4-af63babde704",
+        "name": "La\u00ebl NACRO",
+        "phone": "63097864",
+        "email": "knacro3@gmail.com",
+        "presence": "oui"
+    },
+    {
+        "id": "575a01a4-b239-4c50-9b8c-9331939a412e",
+        "name": "La\u00ebl NACRO",
+        "phone": "63097864",
+        "email": "knacro3@gmail.com",
+        "presence": "oui",
+        "qr_code_data": "http://127.0.0.1:5000/verify/575a01a4-b239-4c50-9b8c-9331939a412e"
+    },
+    {
+        "id": "0fc4bd72-1710-45cf-b426-fc702a1481cf",
+        "name": "Nacro ",
+        "phone": "21421019",
+        "email": "knacro3@gmail.com",
+        "presence": "oui",
+        "qr_code_data": "http://192.168.1.129:5000/verify/0fc4bd72-1710-45cf-b426-fc702a1481cf"
+    },
+    {
+        "id": "7b3cf1fd-4a9d-479a-ab1a-4f36c9356824",
+        "name": "Nacro ",
+        "phone": "21421019",
+        "email": "knacro3@gmail.com",
+        "presence": "oui",
+        "qr_code_data": "http://192.168.1.129:5000/verify/7b3cf1fd-4a9d-479a-ab1a-4f36c9356824"
+    },
+    {
+        "id": "d555f08d-37e1-499c-8ebe-f04ab6c893dc",
+        "name": "Nacr",
+        "phone": "21421019",
+        "email": "knacro3@gmail.com",
+        "presence": "non",
+        "qr_code_data": "http://192.168.1.129:5000/verify/d555f08d-37e1-499c-8ebe-f04ab6c893dc"
+    },
+    {
+        "id": "49bbb0b2-5d16-4741-8a0b-93be375a67ae",
+        "name": "Ke\u00efla ",
+        "phone": "21421019",
+        "email": "l.nacro@pristini-international.tn",
+        "presence": "hesitation",
+        "qr_code_data": "http://192.168.1.129:5000/verify/49bbb0b2-5d16-4741-8a0b-93be375a67ae"
+    },
+    {
+        "id": "c39b3149-6bc7-46c3-bbd5-498d7b47b33b",
+        "name": "Ke\u00efla ",
+        "phone": "21421019",
+        "email": "l.nacro@pristini-international.tn",
+        "presence": "hesitation",
+        "qr_code_data": "http://192.168.1.129:5000/verify/c39b3149-6bc7-46c3-bbd5-498d7b47b33b"
+    },
+    {
+        "id": "5a9f870c-ff8d-415b-a9a1-d43cbae911b1",
+        "name": "Ke\u00efla ",
+        "phone": "21421019",
+        "email": "l.nacro@pristini-international.tn",
+        "presence": "non",
+        "qr_code_data": "http://192.168.1.129:5000/verify/5a9f870c-ff8d-415b-a9a1-d43cbae911b1"
+    },
+    {
+        "id": "d4661a02-c8e1-48cb-baf1-d49476231fa2",
+        "name": "Ke\u00efla ",
+        "phone": "21421019",
+        "email": "l.nacro@pristini-international.tn",
+        "presence": "hesitation",
+        "qr_code_data": "http://192.168.1.129:5000/verify/d4661a02-c8e1-48cb-baf1-d49476231fa2"
+    },
+    {
+        "id": "2b326169-07eb-4ff0-913c-50ec7881d4d7",
+        "name": "Ke\u00efla ",
+        "phone": "21421019",
+        "email": "l.nacro@pristini-international.tn",
+        "presence": "oui",
+        "qr_code_data": "http://192.168.1.129:5000/verify/2b326169-07eb-4ff0-913c-50ec7881d4d7"
+    },
+    {
+        "id": "bc9b9361-9621-41a9-a18a-9825e6072b23",
+        "name": "NACRO ",
+        "phone": "63097864",
+        "email": "knacro3@gmail.com",
+        "presence": "oui",
+        "qr_code_data": "http://127.0.0.1:5000/verify/bc9b9361-9621-41a9-a18a-9825e6072b23"
     }
 ]

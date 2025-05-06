@@ -2,61 +2,84 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation – AMG Burkina Faso</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to right, #FFB84D, #FF6600); /* Mélange orange et jaune */
+            background: linear-gradient(to right, #FFB84D, #FF6600);
             color: white;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding-top: 60px;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
         }
         .container {
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            padding: 30px 20px;
             border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
+            width: 100%;
+            max-width: 450px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h1 {
+            color: #FF6600;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
         img {
-            margin-top: 20px;
-            width: 250px;
-            height: 250px;
+            max-width: 100%;
+            margin: 20px 0;
         }
-        h2 {
-            margin-top: 0;
-        }
-        .download-button {
-            background-color: #FF6600;
-            padding: 10px 20px;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 20px;
+        a.button {
             display: inline-block;
+            padding: 12px 20px;
+            background-color: #FF6600;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
         }
-        .download-button:hover {
+        a.button:hover {
             background-color: #FFB84D;
+            color: #FF6600;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+            p {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Merci {{ name }} !</h2>
-        
-        {% if qr_code %}
-            <p>Voici ton QR code d’accès à l’événement 🎟️</p>
-            <img src="{{ qr_code }}" alt="QR Code">
-            <p>Garde-le précieusement, il sera scanné à l’entrée.</p>
+        <h1>🎉 Confirmation d'inscription</h1>
+        <p>Merci {{ name }} pour ton inscription !</p>
 
-            <!-- Bouton pour télécharger le QR code -->
-            <a href="{{ url_for('download', filename=qr_filename) }}" class="download-button">Télécharger ton QR Code</a>
-        {% else %}
+        {% if qr_code %}
+            <p>Voici ton QR code à présenter à l'entrée :</p>
+            <img src="{{ qr_code }}" alt="QR Code">
+            <br>
+            <p>N'oublie pas de l'amener le jour de l'événement, il sera vérifié à l'entrée.</p>
+            <a class="button" href="{{ url_for('download', filename=qr_filename) }}">📥 Télécharger mon QR code</a>
+        {% elif message %}
             <p>{{ message }}</p>
+        {% else %}
+            <p>Une erreur est survenue. Veuillez réessayer.</p>
         {% endif %}
     </div>
 </body>
