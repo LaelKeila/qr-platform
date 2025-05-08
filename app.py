@@ -73,12 +73,27 @@ def index():
 
     return render_template('index.html', remaining_spots=remaining_spots)
 
-@app.route('/verify/<user_id>')
-def verify(user_id):
-    with open(DATA_FILE, 'r') as f:
-        users = json.load(f)
-    user = next((u for u in users if u['id'] == user_id), None)
-    return render_template('verify.html', user=user, user_id=user_id)
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    user = None
+    error = None
+
+    if request.method == 'POST':
+        # Récupère l'ID ou le code secret entré
+        user_id = request.form.get('user_id')
+
+        # Charge les utilisateurs inscrits
+        with open(DATA_FILE, 'r') as f:
+            users = json.load(f)
+
+        # Cherche l'utilisateur par ID ou code secret
+        user = next((u for u in users if u['id'] == user_id or u['secret_code'] == user_id), None)
+        
+        if not user:
+            error = "Code invalide ou non trouvé."
+
+    # Retourne la page de vérification avec les résultats ou l'erreur
+    return render_template('verify.html', user=user, error=error)
 
 @app.route('/admin/remaining')
 def admin_remaining():

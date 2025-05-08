@@ -6,10 +6,28 @@
 </head>
 <body>
     <h1>Vérifier une inscription</h1>
+
+    <!-- Formulaire de saisie de l'ID ou du code secret -->
     <form method="post">
-        <label for="user_id">Entrer le code d'identification :</label><br>
+        <label for="user_id">Entrer le code d'identification ou le code secret :</label><br>
         <input type="text" id="user_id" name="user_id" required><br><br>
         <button type="submit">Vérifier</button>
     </form>
+
+    <!-- Affichage d'une erreur si l'ID ou code secret est incorrect -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <!-- Affichage des résultats de la vérification -->
+    {% if user %}
+        <h2>Résultat de la vérification</h2>
+        <p><strong>Nom :</strong> {{ user.name }}</p>
+        <p><strong>Prénom :</strong> {{ user.surname }}</p>
+        <p><strong>Téléphone :</strong> {{ user.phone }}</p>
+        <p><strong>Présence :</strong> {{ user.presence }}</p>
+        <p><strong>Code Secret :</strong> {{ user.secret_code }}</p>
+        <p><strong>Que Dieu te bénisse, Bonne Célébration !</strong></p>
+    {% endif %}
 </body>
 </html>
