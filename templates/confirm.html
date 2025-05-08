@@ -2,85 +2,54 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation – AMG Burkina Faso</title>
+    <title>Confirmation d'inscription</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to right, #FFB84D, #FF6600);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px 20px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            background: #fff8e1;
             text-align: center;
-        }
-        h1 {
-            color: #FF6600;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        img {
-            max-width: 100%;
-            margin: 20px 0;
-        }
-        a.button {
-            display: inline-block;
-            padding: 12px 20px;
-            background-color: #FF6600;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        a.button:hover {
-            background-color: #FFB84D;
-            color: #FF6600;
+            padding: 40px;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 20px;
-            }
-            p {
-                font-size: 16px;
-            }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        img {
+            max-width: 200px;
+            margin-top: 20px;
+        }
+
+        a.download {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background-color: #FF6600;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        a.download:hover {
+            background-color: #e65c00;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎉 Confirmation d'inscription</h1>
-        <p>Merci {{ name }} pour ton inscription !</p>
 
-        {% if qr_code %}
-            <p>Voici ton QR code à présenter à l'entrée :</p>
-            <img src="{{ qr_code }}" alt="QR Code">
-            <br>
-            <p>N'oublie pas de l'amener le jour de l'événement, il sera vérifié à l'entrée.</p>
-            <a class="button" href="{{ url_for('download', filename=qr_filename) }}">📥 Télécharger mon QR code</a>
-        {% elif message %}
-            <p>{{ message }}</p>
-        {% else %}
-            <p>Une erreur est survenue. Veuillez réessayer.</p>
-        {% endif %}
-    </div>
+<div class="container">
+    <h2>{{ message }}</h2>
+
+    {% if qr_code %}
+        <img src="{{ qr_code }}" alt="QR Code">
+        <br>
+        <a class="download" href="{{ qr_code }}" download="{{ qr_filename }}">📥 Télécharger le QR Code</a>
+    {% endif %}
+</div>
+
 </body>
 </html>
