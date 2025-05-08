@@ -1,66 +1,21 @@
-<!-- templates/verify_result.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Résultat de vérification</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fefefe;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            color: #FF6600;
-        }
-
-        p {
-            font-size: 18px;
-            margin: 8px 0;
-        }
-
-        .status {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .present {
-            color: green;
-        }
-
-        .absent {
-            color: red;
-        }
-    </style>
+    <title>Résultat de la vérification</title>
 </head>
 <body>
-
-    <div class="card">
-        {% if user %}
-            <h2>Participant trouvé ✅</h2>
-            <p><strong>Nom :</strong> {{ user.name }}</p>
-            <p><strong>Prénom :</strong> {{ user.surname }}</p>
-            <p><strong>Téléphone :</strong> {{ user.phone }}</p>
-            <p><strong>Présence :</strong> {{ user.presence }}</p>
-            <p><strong>Date d'inscription :</strong> {{ user.timestamp | replace('T', ' ')[:19] }}</p>
-            <p class="status present">✔️ Inscrit</p>
-        {% else %}
-            <h2>Participant non trouvé ❌</h2>
-            <p class="status absent">Ce QR code est invalide ou n'existe pas.</p>
-        {% endif %}
-    </div>
-
+    {% if error %}
+        <h2 style="color:red;">{{ error }}</h2>
+    {% else %}
+        <h2>Utilisateur trouvé</h2>
+        <ul>
+            <li><strong>Nom :</strong> {{ user.name }}</li>
+            <li><strong>Prénoms :</strong> {{ user.surname }}</li>
+            <li><strong>Téléphone :</strong> {{ user.phone }}</li>
+            <li><strong>Présence :</strong> {{ user.presence }}</li>
+            <li><strong>ID :</strong> {{ user.id }}</li>
+        </ul>
+    {% endif %}
 </body>
 </html>
