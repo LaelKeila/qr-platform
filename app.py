@@ -3,8 +3,6 @@ import qrcode
 import uuid
 import os
 import json
-import random
-import string
 from datetime import datetime
 
 app = Flask(__name__)
@@ -28,17 +26,6 @@ def get_remaining_spots():
     confirmed_users = [u for u in users if u['presence'] in ('oui', 'hesitation')]
     return MAX_PLACES - len(confirmed_users)
 
-def generate_simple_id(existing_ids):
-    letters = string.ascii_uppercase
-    digits = '0123456789'
-    all_combinations = [l + d for l in letters for d in digits]
-    available_ids = list(set(all_combinations) - set(existing_ids))
-
-    if not available_ids:
-        raise ValueError("Tous les IDs simples sont déjà utilisés.")
-
-    return random.choice(available_ids)
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     remaining_spots = get_remaining_spots()
@@ -51,11 +38,10 @@ def index():
         surname = request.form['surname']
         phone = request.form['phone']
         presence = request.form['presence']
+        user_id = str(uuid.uuid4())
 
-        with open(DATA_FILE, 'r') as f:
-            users = json.load(f)
-        existing_ids = [u['id'] for u in users]
-        user_id = generate_simple_id(existing_ids)
+        # Génération du code secret (exemple : une lettre + un chiffre)
+        secret_code = f"{chr(65 + (len(name) % 26))}{len(surname) % 10}"
 
         data = {
             'id': user_id,
@@ -63,39 +49,36 @@ def index():
             'surname': surname,
             'phone': phone,
             'presence': presence,
-            'qr_code_data': user_id,
+            'secret_code': secret_code,
             'timestamp': datetime.now().isoformat()
         }
 
+        with open(DATA_FILE, 'r') as f:
+            users = json.load(f)
         users.append(data)
         with open(DATA_FILE, 'w') as f:
             json.dump(users, f, indent=4)
 
-        if presence in ('oui', 'hesitation'):
-            qr = qrcode.make(user_id)
+        if presence == 'oui' or presence == 'hesitation':  # Génère un QR code uniquement si la présence est confirmée
+            verify_url = f"{request.host_url}verify/{user_id}".rstrip('/')
+            qr = qrcode.make(verify_url)
             qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
             qr.save(qr_path)
 
-            message = f"Merci pour ton inscription ! Ton code est : {user_id}. N'oublie pas d'amener ce QR code."
-            return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message, verify_url=user_id)
+            message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
+            return render_template('confirm.html', name=name, secret_code=secret_code, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
         else:
             message = "Merci pour ton inscription. Aucun QR code n'a été généré puisque tu ne seras pas présent(e)."
-            return render_template('confirm.html', name=name, message=message)
+            return render_template('confirm.html', name=name, secret_code=secret_code, message=message)
 
     return render_template('index.html', remaining_spots=remaining_spots)
 
-@app.route('/verify', methods=['GET', 'POST'])
-def verify():
-    if request.method == 'POST':
-        input_id = request.form['user_id'].strip().upper()
-        with open(DATA_FILE, 'r') as f:
-            users = json.load(f)
-        user = next((u for u in users if u['id'] == input_id), None)
-        if user:
-            return render_template('verify_result.html', user=user)
-        else:
-            return render_template('verify_result.html', error="Aucun utilisateur trouvé avec cet identifiant.")
-    return render_template('verify.html')
+@app.route('/verify/<user_id>')
+def verify(user_id):
+    with open(DATA_FILE, 'r') as f:
+        users = json.load(f)
+    user = next((u for u in users if u['id'] == user_id), None)
+    return render_template('verify.html', user=user, user_id=user_id)
 
 @app.route('/admin/remaining')
 def admin_remaining():

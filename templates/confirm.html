@@ -6,50 +6,109 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #fff8e1;
+            background: linear-gradient(135deg, #FF6600, #FFD700);
+            margin: 0;
+            padding: 20px;
             text-align: center;
-            padding: 40px;
+            color: #333;
         }
 
-        .container {
+        .confirmation-container {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin: 50px auto;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 700px;
+            position: relative;
         }
 
-        img {
-            max-width: 200px;
-            margin-top: 20px;
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
         }
 
-        a.download {
+        h1 {
+            color: #FF6600;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .message {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .code-secret {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FF6600;
+            border: 2px dashed #FF6600;
+            padding: 10px 20px;
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 18px;
+            margin-bottom: 20px;
+        }
+
+        .blessing {
+            margin-top: 40px;
+            font-style: italic;
+            color: #444;
+            font-size: 18px;
+        }
+
+        .download-btn {
+            margin-top: 25px;
+            padding: 12px 25px;
             background-color: #FF6600;
             color: white;
-            border-radius: 5px;
-            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        a.download:hover {
+        .download-btn:hover {
             background-color: #e65c00;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>{{ message }}</h2>
+<div class="confirmation-container" id="confirmation">
+    <img src="{{ url_for('static', filename='logo_celebration_amg.jpg') }}" class="logo" alt="Logo AMG">
+
+    <h1>Merci {{ name }} pour ton inscription !</h1>
+    <p class="message">Ton code secret est :</p>
+    <div class="code-secret">{{ secret_code }}</div>
 
     {% if qr_code %}
-        <img src="{{ qr_code }}" alt="QR Code">
-        <br>
-        <a class="download" href="{{ qr_code }}" download="{{ qr_filename }}">📥 Télécharger le QR Code</a>
+        <img src="{{ qr_code }}" alt="QR Code" class="qr-code">
+        <p>Merci de montrer ce code lors de l'événement.</p>
+    {% else %}
+        <p>Aucun QR Code généré car tu as indiqué que tu ne seras pas présent(e).</p>
     {% endif %}
+
+    <button class="download-btn" onclick="downloadPage()">📄 Télécharger cette page</button>
+
+    <p class="blessing">🙏 Que Dieu te bénisse, Bonne célébration 🎉</p>
 </div>
+
+<script>
+    function downloadPage() {
+        const content = document.getElementById('confirmation').innerHTML;
+        const blob = new Blob([`
+            <html><head><meta charset="UTF-8"><title>Confirmation</title></head>
+            <body>${content}</body></html>
+        `], { type: 'text/html' });
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "confirmation_AMG.html";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 
 </body>
 </html>
