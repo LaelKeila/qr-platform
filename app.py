@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import qrcode
 import uuid
 import os
 import json
 from datetime import datetime
+import pandas as pd  # 📦 Pour générer le fichier Excel
 
 app = Flask(__name__)
 
@@ -37,7 +38,6 @@ def index():
         name = request.form['name']
         surname = request.form['surname']
         phone = request.form['phone']
-        presence = request.form['presence']
         user_id = str(uuid.uuid4())
 
         # Génération du code secret (exemple : une lettre + un chiffre)
@@ -48,7 +48,6 @@ def index():
             'name': name,
             'surname': surname,
             'phone': phone,
-            'presence': presence,
             'secret_code': secret_code,
             'timestamp': datetime.now().isoformat()
         }
@@ -59,18 +58,14 @@ def index():
         with open(DATA_FILE, 'w') as f:
             json.dump(users, f, indent=4)
 
-        if presence in ('oui', 'hesitation'):
-            # 🟢 Texte lisible directement à l'affichage du QR
-            qr_text = f"✅ Vérifié : {name} {surname}"
-            qr = qrcode.make(qr_text)
-            qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
-            qr.save(qr_path)
+        # QR code généré pour l'inscription
+        qr_text = f"✅ Vérifié : {name} {surname}"
+        qr = qrcode.make(qr_text)
+        qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
+        qr.save(qr_path)
 
-            message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
-            return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
-        else:
-            message = "Merci pour ton inscription. Aucun QR code n'a été généré puisque tu ne seras pas présent(e)."
-            return render_template('confirm.html', name=name, message=message)
+        message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
+        return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
 
     return render_template('index.html', remaining_spots=remaining_spots)
 
@@ -82,7 +77,6 @@ def admin_remaining():
 def scanner():
     return render_template('scanner.html')
 
-# Ajoute cette route pour vérifier les utilisateurs à partir du QR code
 @app.route('/verify/<user_id>', methods=['GET'])
 def verify(user_id):
     with open(DATA_FILE, 'r') as f:
@@ -90,10 +84,29 @@ def verify(user_id):
     
     user = next((u for u in users if u['id'] == user_id), None)
     
-    if user and user['presence'] in ('oui', 'hesitation'):  # Vérifie si l'utilisateur est confirmé
+    if user:
         return jsonify({"verified": True, "user": user})
     else:
         return jsonify({"verified": False})
+
+# 🔸 Route pour afficher la liste des inscrits dans une page HTML
+@app.route('/liste-inscrits')
+def liste_inscrits():
+    with open(DATA_FILE, 'r') as f:
+        users = json.load(f)
+    return render_template('liste_inscrits.html', inscrits=users)
+
+# 🔸 Route pour générer et télécharger le fichier Excel
+@app.route('/download-excel')
+def download_excel():
+    with open(DATA_FILE, 'r') as f:
+        users = json.load(f)
+
+    df = pd.DataFrame(users)
+    excel_path = 'inscrits.xlsx'
+    df.to_excel(excel_path, index=False)
+
+    return send_file(excel_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.debug = True

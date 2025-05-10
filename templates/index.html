@@ -1,147 +1,17 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Concert AMG</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #e67e00, #cc6c00);
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 30px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            width: 90%;
-        }
-
-        h1 {
-            color: #e67e00;
-            text-align: center;
-            font-size: 1.8em;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        input, select {
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            margin-top: 5px;
-            font-size: 1em;
-        }
-
-        button {
-            margin-top: 25px;
-            padding: 12px;
-            background-color: #e67e00;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #cc6c00;
-        }
-
-        .logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .logo img {
-            height: 70px;
-            max-width: 100%;
-        }
-
-        .info {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 1.1em;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 500px) {
-            h1 {
-                font-size: 1.4em;
-            }
-
-            button {
-                padding: 10px;
-            }
-
-            input, select {
-                font-size: 0.95em;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo AMG">
+<form method="POST">
+    <div>
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" required>
     </div>
-
-    <h1>Inscription Célébration - 5 ans AMG Burkina Faso 🎉</h1>
-
-    <form method="POST">
-        <label for="name">Nom :</label>
-        <input type="text" name="name" required>
-
-        <label for="surname">Prénoms :</label>
-        <input type="text" name="surname" required>
-
-        <label for="phone">Téléphone :</label>
-        <input type="text" name="phone" required>
-
-        <label for="presence">Seras-tu présent ?</label>
-        <select name="presence" required>
-            <option value="">-- Choisis une option --</option>
-            <option value="oui">Oui</option>
-            <option value="hesitation">Je ne suis pas sûr(e)</option>
-            <option value="non">Non</option>
-        </select>
-
+    <div>
+        <label for="surname">Prénom(s)</label>
+        <input type="text" id="surname" name="surname" required>
+    </div>
+    <div>
+        <label for="phone">Numéro de téléphone</label>
+        <input type="text" id="phone" name="phone" required>
+    </div>
+    <div>
         <button type="submit">S'inscrire</button>
-    </form>
-
-    {% if remaining_spots is not none %}
-        <div class="info">
-            🎟️ Places restantes : <strong>{{ remaining_spots }}</strong>
-        </div>
-    {% endif %}
-
-    {% if error %}
-        <div class="error">{{ error }}</div>
-    {% endif %}
-</div>
-
-</body>
-</html>
+    </div>
+</form>
