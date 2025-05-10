@@ -5,10 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vérification</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .result { margin-top: 20px; }
-        .verified { color: green; }
-        .error { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e67e00, #cc6c00);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .result {
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .verified h2 {
+            color: green;
+        }
+
+        .error h2 {
+            color: red;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            background-color: #e67e00;
+            padding: 12px;
+            border-radius: 10px;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #cc6c00;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .result {
+                padding: 15px;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>

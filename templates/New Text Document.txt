@@ -4,15 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation d'Inscription</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #e67e00, #cc6c00);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #e67e00;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        .buttons a,
+        .buttons button {
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background-color: #e67e00;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .buttons a:hover,
+        .buttons button:hover {
+            background-color: #cc6c00;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .buttons a,
+            .buttons button {
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Merci pour ton inscription, {{ name }} !</h1>
-    
+
+<div class="container">
+    <h1>Merci pour ton inscription, {{ name }} ! 🎉</h1>
+
     {% if qr_code %}
         <p>{{ message }}</p>
-        <img src="{{ qr_code }}" alt="QR Code">
+        <img id="qrImage" src="{{ qr_code }}" alt="QR Code">
+        <div class="buttons">
+            <a href="/">Retour à l'accueil</a>
+            <button onclick="downloadQR()">Télécharger le QR Code</button>
+        </div>
     {% else %}
         <p>{{ message }}</p>
+        <div class="buttons">
+            <a href="/">Retour à l'accueil</a>
+        </div>
     {% endif %}
+</div>
+
+<script>
+    function downloadQR() {
+        const qrImage = document.getElementById('qrImage');
+        const link = document.createElement('a');
+        link.href = qrImage.src;
+        link.download = 'qr_code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
 </body>
 </html>

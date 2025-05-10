@@ -2,28 +2,31 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Concert AMG</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #ffcc00, #ff9900);
+            background: linear-gradient(to right, #e67e00, #cc6c00);
             margin: 0;
             padding: 0;
         }
 
         .container {
             max-width: 600px;
-            margin: 50px auto;
+            margin: 30px auto;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
         }
 
         h1 {
             color: #e67e00;
             text-align: center;
+            font-size: 1.8em;
         }
 
         form {
@@ -41,6 +44,7 @@
             border-radius: 10px;
             border: 1px solid #ccc;
             margin-top: 5px;
+            font-size: 1em;
         }
 
         button {
@@ -51,6 +55,7 @@
             border: none;
             border-radius: 15px;
             font-weight: bold;
+            font-size: 1em;
             cursor: pointer;
             transition: background 0.3s ease;
         }
@@ -66,19 +71,34 @@
         }
 
         .logo img {
-            height: 90px;
+            height: 70px;
+            max-width: 100%;
         }
 
         .info {
             margin-top: 20px;
             text-align: center;
-            font-size: 18px;
+            font-size: 1.1em;
         }
 
         .error {
             color: red;
             text-align: center;
             margin-top: 10px;
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.4em;
+            }
+
+            button {
+                padding: 10px;
+            }
+
+            input, select {
+                font-size: 0.95em;
+            }
         }
     </style>
 </head>
@@ -89,7 +109,7 @@
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo AMG">
     </div>
 
-    <h1>Inscription au Concert AMG 🎶</h1>
+    <h1>Inscription Célébration - 5 ans AMG Burkina Faso 🎉</h1>
 
     <form method="POST">
         <label for="name">Nom :</label>

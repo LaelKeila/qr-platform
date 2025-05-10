@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation d'Inscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(to right, #e67e00, #cc6c00);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 250px;
+            width: 80%;
+            height: auto;
+        }
+
+        .qr-message {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h1>Merci pour ton inscription, {{ name }} !</h1>
-    
+
     {% if qr_code %}
         <p>{{ message }}</p>
         <img src="{{ qr_code }}" alt="QR Code">
+        <div class="qr-message">🎫 Présente-toi avec ce QR Code le jour de l'événement pour accéder à la salle.</div>
     {% else %}
         <p>{{ message }}</p>
     {% endif %}
