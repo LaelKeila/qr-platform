@@ -2,84 +2,17 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmation d'inscription</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .ticket {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            display: inline-block;
-            text-align: center;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
-            width: 350px;
-            position: relative;
-        }
-
-        img.logo {
-            width: 100px;
-            margin-bottom: 20px;
-        }
-
-        .qr {
-            width: 200px;
-            margin: 15px 0;
-        }
-
-        .info {
-            font-size: 16px;
-            margin-top: 15px;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #ff9800;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #e68a00;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation d'Inscription</title>
 </head>
 <body>
-
-    <div class="ticket" id="ticket">
-        <img src="{{ url_for('static', filename='logo.png') }}" class="logo" alt="Logo">
-        <h2>Confirmation d'inscription</h2>
-        <p class="info"><strong>Nom :</strong> {{ name }}</p>
-        <p class="info"><strong>Code secret :</strong> {{ secret_code }}</p>
-        {% if qr_code %}
-            <img src="{{ qr_code }}" class="qr" alt="QR Code">
-        {% endif %}
-        <p>{{ message }}</p>
-    </div>
-
+    <h1>Merci pour ton inscription, {{ name }} !</h1>
+    
     {% if qr_code %}
-    <button onclick="downloadTicket()">Télécharger cette fiche</button>
+        <p>{{ message }}</p>
+        <img src="{{ qr_code }}" alt="QR Code">
+    {% else %}
+        <p>{{ message }}</p>
     {% endif %}
-
-    <script>
-        function downloadTicket() {
-            html2canvas(document.getElementById("ticket")).then(function(canvas) {
-                const link = document.createElement('a');
-                link.download = 'confirmation.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>

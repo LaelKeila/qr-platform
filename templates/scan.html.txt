@@ -2,112 +2,73 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scanner QR Code</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #FF6600, #FFD700);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #333;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            margin-top: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-        }
-        h1 {
+            font-family: Arial, sans-serif;
             text-align: center;
-            color: #FF6600;
-            font-size: 22px;
-            margin-bottom: 20px;
+            background-color: #f4f4f4;
+            padding: 20px;
         }
-        #scanner {
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            display: block;
-            margin: 20px auto;
+        #preview {
+            width: 300px;
+            height: 300px;
+            margin: auto;
         }
-        button {
-            background-color: #FF6600;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #e65c00;
+        #message {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Scanner le QR Code</h1>
+    <h1>Vérification des Inscriptions</h1>
+    <video id="preview"></video>
+    <div id="message">Scannez un QR code...</div>
 
-        <video id="scanner" width="100%" height="auto"></video>
-
-        <p id="status">Scannez un QR code pour vérifier l'inscription.</p>
-
-        <button onclick="startScanner()">Démarrer le scan</button>
-    </div>
-
-    <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        const video = document.getElementById('scanner');
-        const statusElement = document.getElementById('status');
+        const messageBox = document.getElementById('message');
 
-        function startScanner() {
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                    .then(function (stream) {
-                        video.srcObject = stream;
-                        video.setAttribute("playsinline", true); // nécessaire pour iOS
-                        video.play();
-                        requestAnimationFrame(scanQRCode);
-                    })
-                    .catch(function (error) {
-                        statusElement.textContent = "Erreur : Impossible d'accéder à la caméra.";
-                    });
-            } else {
-                statusElement.textContent = "Erreur : La caméra n'est pas supportée par ce navigateur.";
-            }
-        }
-
-        function scanQRCode() {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.height = video.videoHeight;
-                canvas.width = video.videoWidth;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, canvas.width, canvas.height, {
-                    inversionAttempts: "dontInvert",
+        // Fonction pour envoyer l'ID scanné à Flask et récupérer la réponse
+        function checkQRContent(text) {
+            fetch(`/verify/${text}`)  // Envoie une requête à Flask avec l'ID de l'utilisateur
+                .then(response => response.json())
+                .then(data => {
+                    if (data.verified) {
+                        messageBox.textContent = `✅ Accès autorisé : ${data.user.name} ${data.user.surname}`;
+                        messageBox.style.color = "green";
+                    } else {
+                        messageBox.textContent = "❌ Échec - accès refusé";
+                        messageBox.style.color = "red";
+                    }
+                })
+                .catch(error => {
+                    messageBox.textContent = "❌ Erreur lors de la vérification";
+                    messageBox.style.color = "red";
                 });
-
-                if (code) {
-                    statusElement.textContent = `QR Code trouvé : ${code.data}`;
-                    window.location.href = `/verify/${code.data}`;
-                } else {
-                    requestAnimationFrame(scanQRCode);
-                }
-            } else {
-                requestAnimationFrame(scanQRCode);
-            }
         }
+
+        const html5QrCode = new Html5Qrcode("preview");
+        Html5Qrcode.getCameras().then(cameras => {
+            if (cameras && cameras.length) {
+                html5QrCode.start(
+                    cameras[0].id,
+                    {
+                        fps: 10,
+                        qrbox: 250
+                    },
+                    qrCodeMessage => {
+                        checkQRContent(qrCodeMessage);  // L'ID scanné est envoyé à Flask pour la vérification
+                        html5QrCode.stop();  // Arrêter après lecture
+                    },
+                    errorMessage => {
+                        // Ignorer les erreurs de scan
+                    }
+                );
+            }
+        });
     </script>
 </body>
 </html>

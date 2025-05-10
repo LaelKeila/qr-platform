@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Flask, render_template, request, jsonify
 import qrcode
 import uuid
 import os
@@ -59,46 +59,43 @@ def index():
         with open(DATA_FILE, 'w') as f:
             json.dump(users, f, indent=4)
 
-        if presence == 'oui' or presence == 'hesitation':  # Génère un QR code uniquement si la présence est confirmée
-            verify_url = f"{request.host_url}verify/{user_id}".rstrip('/')
-            qr = qrcode.make(verify_url)
+        if presence in ('oui', 'hesitation'):
+            # 🟢 Texte lisible directement à l'affichage du QR
+            qr_text = f"✅ Vérifié : {name} {surname}"
+            qr = qrcode.make(qr_text)
             qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
             qr.save(qr_path)
 
             message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
-            return render_template('confirm.html', name=name, secret_code=secret_code, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
+            return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
         else:
             message = "Merci pour ton inscription. Aucun QR code n'a été généré puisque tu ne seras pas présent(e)."
-            return render_template('confirm.html', name=name, secret_code=secret_code, message=message)
+            return render_template('confirm.html', name=name, message=message)
 
     return render_template('index.html', remaining_spots=remaining_spots)
-
-@app.route('/verify', methods=['GET', 'POST'])
-def verify():
-    user = None
-    error = None
-
-    if request.method == 'POST':
-        # Récupère l'ID ou le code secret entré
-        user_id = request.form.get('user_id')
-
-        # Charge les utilisateurs inscrits
-        with open(DATA_FILE, 'r') as f:
-            users = json.load(f)
-
-        # Cherche l'utilisateur par ID ou code secret
-        user = next((u for u in users if u['id'] == user_id or u['secret_code'] == user_id), None)
-        
-        if not user:
-            error = "Code invalide ou non trouvé."
-
-    # Retourne la page de vérification avec les résultats ou l'erreur
-    return render_template('verify.html', user=user, error=error)
 
 @app.route('/admin/remaining')
 def admin_remaining():
     return jsonify({"places_restantes": get_remaining_spots()})
 
+@app.route('/scanner')
+def scanner():
+    return render_template('scanner.html')
+
+# Ajoute cette route pour vérifier les utilisateurs à partir du QR code
+@app.route('/verify/<user_id>', methods=['GET'])
+def verify(user_id):
+    with open(DATA_FILE, 'r') as f:
+        users = json.load(f)
+    
+    user = next((u for u in users if u['id'] == user_id), None)
+    
+    if user and user['presence'] in ('oui', 'hesitation'):  # Vérifie si l'utilisateur est confirmé
+        return jsonify({"verified": True, "user": user})
+    else:
+        return jsonify({"verified": False})
+
 if __name__ == '__main__':
+    app.debug = True
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)

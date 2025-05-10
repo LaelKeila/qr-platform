@@ -2,134 +2,124 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - AMG</title>
+    <title>Inscription - Concert AMG</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #FF6600, #FFD700);
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #ffcc00, #ff9900);
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #333;
-        }
-
-        .logo-container {
-            width: 100%;
-            padding: 40px 0;
-            display: flex;
-            justify-content: center;
-            background: linear-gradient(135deg, #FF6600, #FFD700);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            max-width: 250px;
-            border-radius: 10px;
-            border: 5px solid white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .container {
-            background-color: white;
-            padding: 30px;
-            margin-top: 10px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            width: 90%;
             max-width: 600px;
-            border-top: 5px solid #FF6600;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
+            color: #e67e00;
             text-align: center;
-            color: #FF6600;
-            margin-bottom: 10px;
         }
 
-        p.remaining {
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 20px;
+        form {
+            display: flex;
+            flex-direction: column;
         }
 
         label {
-            font-weight: bold;
             margin-top: 15px;
-            display: block;
+            font-weight: bold;
         }
 
         input, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #FF6600;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
         }
 
         button {
-            background-color: #FF6600;
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #e67e00;
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 15px;
+            font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            transition: background 0.3s ease;
         }
 
         button:hover {
-            background-color: #e65c00;
+            background-color: #cc6c00;
         }
 
-        .full {
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            height: 90px;
+        }
+
+        .info {
+            margin-top: 20px;
             text-align: center;
-            font-size: 20px;
+            font-size: 18px;
+        }
+
+        .error {
             color: red;
-            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="logo-container">
-    <img src="{{ url_for('static', filename='logo_celebration_amg.jpg') }}" alt="Logo" class="logo">
-</div>
-
 <div class="container">
-    <h1>Inscription - Célébration 5 ans AMG</h1>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo AMG">
+    </div>
 
-    {% if remaining_spots <= 0 %}
-        <p class="full">⚠️ Désolé, toutes les places sont prises. L’inscription est fermée.</p>
-    {% else %}
-        <p class="remaining">🎟️ Places restantes : {{ remaining_spots }} / {{ capacity }}</p>
+    <h1>Inscription au Concert AMG 🎶</h1>
 
-        <form action="/" method="POST">
-            <label for="name">Nom :</label>
-            <input type="text" id="name" name="name" required>
+    <form method="POST">
+        <label for="name">Nom :</label>
+        <input type="text" name="name" required>
 
-            <label for="surname">Prénom :</label>
-            <input type="text" id="surname" name="surname" required>
+        <label for="surname">Prénoms :</label>
+        <input type="text" name="surname" required>
 
-            <label for="phone">Numéro de téléphone :</label>
-            <input type="tel" id="phone" name="phone" required>
+        <label for="phone">Téléphone :</label>
+        <input type="text" name="phone" required>
 
-            <label for="presence">Confirmez-vous votre présence ?</label>
-            <select id="presence" name="presence" required>
-                <option value="">Sélectionner...</option>
-                <option value="oui">Oui</option>
-                <option value="non">Non</option>
-                <option value="hesitation">J'hésite</option>
-            </select>
+        <label for="presence">Seras-tu présent ?</label>
+        <select name="presence" required>
+            <option value="">-- Choisis une option --</option>
+            <option value="oui">Oui</option>
+            <option value="hesitation">Je ne suis pas sûr(e)</option>
+            <option value="non">Non</option>
+        </select>
 
-            <button type="submit">Envoyer</button>
-        </form>
+        <button type="submit">S'inscrire</button>
+    </form>
+
+    {% if remaining_spots is not none %}
+        <div class="info">
+            🎟️ Places restantes : <strong>{{ remaining_spots }}</strong>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
     {% endif %}
 </div>
 
