@@ -87,15 +87,16 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="capture">
     <h1>Merci pour ton inscription, {{ name }} ! 🎉</h1>
 
     {% if qr_code %}
         <p>{{ message }}</p>
         <img id="qrImage" src="{{ qr_code }}" alt="QR Code">
+        <p>📌 Présente-toi avec ce code QR le jour du concert.</p>
         <div class="buttons">
             <a href="/">Retour à l'accueil</a>
-            <button onclick="downloadQR()">Télécharger le QR Code</button>
+            <button onclick="downloadAsImage()">Télécharger l'inscription</button>
         </div>
     {% else %}
         <p>{{ message }}</p>
@@ -105,15 +106,19 @@
     {% endif %}
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-    function downloadQR() {
-        const qrImage = document.getElementById('qrImage');
-        const link = document.createElement('a');
-        link.href = qrImage.src;
-        link.download = 'qr_code.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    function downloadAsImage() {
+        const name = "{{ name|replace(' ', '_') }}";
+        const surname = "{{ surname|replace(' ', '_') }}";
+        const filename = `Inscription_${name}_${surname}.png`;
+
+        html2canvas(document.getElementById("capture")).then(canvas => {
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
     }
 </script>
 
