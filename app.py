@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
 import qrcode
 import uuid
 import os
@@ -94,7 +94,7 @@ def verify(user_id):
 def liste_inscrits():
     with open(DATA_FILE, 'r') as f:
         users = json.load(f)
-    return render_template('liste_inscrits.html', inscrits=users)
+    return render_template('static/liste_inscrits.html', inscrits=users)
 
 # 🔸 Route pour générer et télécharger le fichier Excel
 @app.route('/download-excel')
@@ -103,10 +103,15 @@ def download_excel():
         users = json.load(f)
 
     df = pd.DataFrame(users)
-    excel_path = 'inscrits.xlsx'
+    excel_path = 'static/inscrits.xlsx'  # Le fichier Excel sera stocké dans 'static'
     df.to_excel(excel_path, index=False)
 
     return send_file(excel_path, as_attachment=True)
+
+# 🔸 Route pour servir le fichier Excel directement via une URL
+@app.route('/static/inscrits.xlsx')
+def serve_excel():
+    return send_from_directory('static', 'inscrits.xlsx')
 
 if __name__ == '__main__':
     app.debug = True
