@@ -1,26 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>Vérification des Inscriptions</title>
+    <!-- Import de la bibliothèque html5-qrcode -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #reader {
+            width: 300px;
+            margin: auto;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
 </head>
 <body>
     <h1>Vérification des Inscriptions</h1>
-    <div id="reader" style="width: 300px;"></div>
-    <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+    <p>Scannez un QR code...</p>
 
+    <!-- Élément pour afficher la caméra -->
+    <div id="reader"></div>
+    <div id="result"></div>
+
+    <!-- Script d'initialisation -->
     <script>
         function onScanSuccess(decodedText, decodedResult) {
             document.getElementById('result').innerText = "QR Code détecté : " + decodedText;
+            // Redirection possible après lecture :
+            // window.location.href = "/verify?code=" + encodeURIComponent(decodedText);
         }
 
-        function onScanError(errorMessage) {
-            // Pas besoin d'afficher l'erreur à chaque fois.
+        function onScanFailure(error) {
+            // On peut afficher les erreurs si besoin
+            // console.warn(`Erreur de scan : ${error}`);
         }
 
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: 250 });
-        html5QrcodeScanner.render(onScanSuccess, onScanError);
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start(
+            { facingMode: "environment" }, // Caméra arrière
+            { fps: 10, qrbox: 250 },
+            onScanSuccess,
+            onScanFailure
+        );
     </script>
 </body>
 </html>
