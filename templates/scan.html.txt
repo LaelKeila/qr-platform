@@ -1,74 +1,26 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Scanner QR Code</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        #preview {
-            width: 300px;
-            height: 300px;
-            margin: auto;
-        }
-        #message {
-            font-size: 24px;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
+    <title>Vérification des Inscriptions</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
     <h1>Vérification des Inscriptions</h1>
-    <video id="preview"></video>
-    <div id="message">Scannez un QR code...</div>
+    <div id="reader" style="width: 300px;"></div>
+    <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        const messageBox = document.getElementById('message');
-
-        // Fonction pour envoyer l'ID scanné à Flask et récupérer la réponse
-        function checkQRContent(text) {
-            fetch(`/verify/${text}`)  // Envoie une requête à Flask avec l'ID de l'utilisateur
-                .then(response => response.json())
-                .then(data => {
-                    if (data.verified) {
-                        messageBox.textContent = `✅ Accès autorisé : ${data.user.name} ${data.user.surname}`;
-                        messageBox.style.color = "green";
-                    } else {
-                        messageBox.textContent = "❌ Échec - accès refusé";
-                        messageBox.style.color = "red";
-                    }
-                })
-                .catch(error => {
-                    messageBox.textContent = "❌ Erreur lors de la vérification";
-                    messageBox.style.color = "red";
-                });
+        function onScanSuccess(decodedText, decodedResult) {
+            document.getElementById('result').innerText = "QR Code détecté : " + decodedText;
         }
 
-        const html5QrCode = new Html5Qrcode("preview");
-        Html5Qrcode.getCameras().then(cameras => {
-            if (cameras && cameras.length) {
-                html5QrCode.start(
-                    cameras[0].id,
-                    {
-                        fps: 10,
-                        qrbox: 250
-                    },
-                    qrCodeMessage => {
-                        checkQRContent(qrCodeMessage);  // L'ID scanné est envoyé à Flask pour la vérification
-                        html5QrCode.stop();  // Arrêter après lecture
-                    },
-                    errorMessage => {
-                        // Ignorer les erreurs de scan
-                    }
-                );
-            }
-        });
+        function onScanError(errorMessage) {
+            // Pas besoin d'afficher l'erreur à chaque fois.
+        }
+
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
     </script>
 </body>
 </html>
