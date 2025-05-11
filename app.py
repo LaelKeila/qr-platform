@@ -24,8 +24,7 @@ MAX_PLACES = 1500
 def get_remaining_spots():
     with open(DATA_FILE, 'r') as f:
         users = json.load(f)
-    confirmed_users = [u for u in users if u['presence'] in ('oui', 'hesitation')]
-    return MAX_PLACES - len(confirmed_users)
+    return MAX_PLACES - len(users)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

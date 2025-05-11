@@ -1,92 +1,18 @@
 [
     {
-        "id": "cc99f918-5dce-43a6-a0e3-87fdef651a84",
+        "id": "7e90ad56-d222-4859-ae76-5df4a919579a",
         "name": "NACRO ",
         "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
         "phone": "63097864",
-        "presence": "oui",
-        "qr_code_data": "http://127.0.0.1:5000/verify/cc99f918-5dce-43a6-a0e3-87fdef651a84",
-        "timestamp": "2025-05-08T21:04:30.841543"
+        "secret_code": "G5",
+        "timestamp": "2025-05-11T01:41:21.760611"
     },
     {
-        "id": "a1cc2143-f18c-4b67-a856-686cc9ed1502",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
+        "id": "63901438-eb1b-4747-90b3-c49722364b83",
+        "name": "La\u00ebl Ke\u00efla",
+        "surname": "NACRO",
         "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T13:14:39.892094"
-    },
-    {
-        "id": "299c1906-ef2c-4eaf-8acb-a90afe59a3be",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T13:23:34.094478"
-    },
-    {
-        "id": "4fb84ae5-93b0-430b-9049-3f9b2196f2a3",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T15:08:17.667709"
-    },
-    {
-        "id": "a5812759-82b2-4bff-a4ac-16a7c979ed66",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T15:16:12.424931"
-    },
-    {
-        "id": "a071a1af-72f1-431e-9081-caf74816de61",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T16:10:49.221109"
-    },
-    {
-        "id": "605790fe-1366-45fc-871b-fce5de727a34",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T16:34:25.151150"
-    },
-    {
-        "id": "f7425029-c2dd-4d31-b5b6-eb49c0e959cd",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T16:37:41.697503"
-    },
-    {
-        "id": "981757e8-a22d-4564-ac32-458642e8e807",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T16:38:32.419370"
-    },
-    {
-        "id": "35b4c5a6-aaea-4b77-8aae-27afcc28167f",
-        "name": "NACRO ",
-        "surname": "La\u00ebl Ke\u00efla Lithafloraim\u00e9e",
-        "phone": "63097864",
-        "presence": "oui",
-        "secret_code": "G5",
-        "timestamp": "2025-05-10T16:49:20.395811"
+        "secret_code": "K5",
+        "timestamp": "2025-05-11T02:09:24.934341"
     }
 ]

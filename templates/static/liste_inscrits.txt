@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des inscrits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff9f0;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff6600;
+        }
+        a button {
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #ffd580;
+        }
+        tr:nth-child(even) {
+            background-color: #fef5e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des inscrits</h1>
+
+    <a href="/download-excel" download>
+        <button style="background-color: #ff6600; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            📥 Télécharger la liste en Excel
+        </button>
+    </a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Date d'inscription</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in inscrits %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.surname }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.timestamp[:10] }} à {{ user.timestamp[11:16] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
