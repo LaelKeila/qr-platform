@@ -18,22 +18,9 @@ if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'w') as f:
         json.dump([], f)
 
-# Nombre max d'inscriptions
-MAX_PLACES = 1500
-
-def get_remaining_spots():
-    with open(DATA_FILE, 'r') as f:
-        users = json.load(f)
-    return MAX_PLACES - len(users)
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    remaining_spots = get_remaining_spots()
-
     if request.method == 'POST':
-        if remaining_spots <= 0:
-            return render_template('index.html', remaining_spots=0, error="Désolé, il n'y a plus de places disponibles.")
-
         name = request.form['name']
         surname = request.form['surname']
         phone = request.form['phone']
@@ -66,11 +53,13 @@ def index():
         message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
         return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
 
-    return render_template('index.html', remaining_spots=remaining_spots)
+    return render_template('index.html')
 
 @app.route('/admin/remaining')
 def admin_remaining():
-    return jsonify({"places_restantes": get_remaining_spots()})
+    with open(DATA_FILE, 'r') as f:
+        users = json.load(f)
+    return jsonify({"inscrits": len(users)})
 
 @app.route('/scanner')
 def scanner():

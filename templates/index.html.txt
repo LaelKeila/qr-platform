@@ -124,12 +124,6 @@
         <button type="submit">S'inscrire</button>
     </form>
 
-    {% if remaining_spots is not none %}
-        <div class="info">
-            🎟️ Places restantes : <strong>{{ remaining_spots }}</strong>
-        </div>
-    {% endif %}
-
     {% if error %}
         <div class="error">{{ error }}</div>
     {% endif %}
