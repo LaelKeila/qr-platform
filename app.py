@@ -20,40 +20,7 @@ if not os.path.exists(DATA_FILE):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        name = request.form['name']
-        surname = request.form['surname']
-        phone = request.form['phone']
-        user_id = str(uuid.uuid4())
-
-        # Génération du code secret (exemple : une lettre + un chiffre)
-        secret_code = f"{chr(65 + (len(name) % 26))}{len(surname) % 10}"
-
-        data = {
-            'id': user_id,
-            'name': name,
-            'surname': surname,
-            'phone': phone,
-            'secret_code': secret_code,
-            'timestamp': datetime.now().isoformat()
-        }
-
-        with open(DATA_FILE, 'r') as f:
-            users = json.load(f)
-        users.append(data)
-        with open(DATA_FILE, 'w') as f:
-            json.dump(users, f, indent=4)
-
-        # QR code généré pour l'inscription
-        qr_text = f"✅ Vérifié : {name} {surname}"
-        qr = qrcode.make(qr_text)
-        qr_path = os.path.join(QR_FOLDER, f"{user_id}.png")
-        qr.save(qr_path)
-
-        message = "Merci pour ton inscription ! N'oublie pas d'amener ce QR code le jour de l'événement."
-        return render_template('confirm.html', name=name, qr_code='/static/qrcodes/' + f"{user_id}.png", message=message)
-
-    return render_template('index.html')
+    return render_template('full.html')
 
 @app.route('/admin/remaining')
 def admin_remaining():
