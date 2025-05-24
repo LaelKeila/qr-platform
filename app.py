@@ -20,7 +20,42 @@ if not os.path.exists(DATA_FILE):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('full.html')
+    return """
+    <html>
+        <head>
+            <title>Inscriptions fermées</title>
+            <style>
+                body {
+                    margin: 0;
+                    height: 100vh;
+                    background-color: #FF8C00;  /* orange foncé */
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-family: Arial, sans-serif;
+                    color: white;
+                    text-align: center;
+                    padding: 20px;
+                }
+                h2 {
+                    font-size: 2.5em;
+                    margin-bottom: 0.5em;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                }
+                p {
+                    font-size: 1.2em;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                }
+            </style>
+        </head>
+        <body>
+            <div>
+                <h2>Désolé, aucune place disponible. 🙏</h2>
+                <p>Merci pour votre enthousiasme et votre participation.<br>Que Dieu vous bénisse.</p>
+            </div>
+        </body>
+    </html>
+    """
 
 @app.route('/admin/remaining')
 def admin_remaining():
@@ -44,26 +79,23 @@ def verify(user_id):
     else:
         return jsonify({"verified": False})
 
-# 🔸 Route pour afficher la liste des inscrits dans une page HTML
 @app.route('/liste-inscrits')
 def liste_inscrits():
     with open(DATA_FILE, 'r') as f:
         users = json.load(f)
     return render_template('static/liste_inscrits.html', inscrits=users)
 
-# 🔸 Route pour générer et télécharger le fichier Excel
 @app.route('/download-excel')
 def download_excel():
     with open(DATA_FILE, 'r') as f:
         users = json.load(f)
 
     df = pd.DataFrame(users)
-    excel_path = 'static/inscrits.xlsx'  # Le fichier Excel sera stocké dans 'static'
+    excel_path = 'static/inscrits.xlsx'
     df.to_excel(excel_path, index=False)
 
     return send_file(excel_path, as_attachment=True)
 
-# 🔸 Route pour servir le fichier Excel directement via une URL
 @app.route('/static/inscrits.xlsx')
 def serve_excel():
     return send_from_directory('static', 'inscrits.xlsx')
